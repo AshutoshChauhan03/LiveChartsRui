@@ -23,7 +23,7 @@ interface LiveChartProps {
   /** @type { string } : Choose which graph to render*/
   type?: "cpu" | "free" | "cpuFree";
 
-  /** @type { string } : Enter the websocket url (websocket must emit object in format { key: value, key: value } where first key is xAxis & second key is yAxis )*/
+  /** @type { string } : Enter the websocket url (websocket must emit object in format { xAxis: value, yAxis: value } */
   ws?: string;
 
   /** @type { number } : Choose width of graph*/
@@ -33,13 +33,16 @@ interface LiveChartProps {
   height?: number;
 
   /** @type { string } : Choose the update interval for default WS ( Incase of custom ws emit on favourable intervals ) */
-  updateInterval?: "1s" | "30s" | "1m";
+  updateInterval?: "1s" | "5s" | "10s";
 
   /** @type { string } : Choose the type of graph to render */
   graphType?: "LineChart" | "AreaChart";
 
   /** @type { string } : Select the theme for the graph */
-  theme?: "light" | "dark";
+  theme?: {
+    CartesianGrid?: string;
+    Legend_verticalAlign?: string;
+  };
 
   /** @type { object } : Style the main div of the graph */
   style?: object;
@@ -65,6 +68,9 @@ function LiveChart({
       ws = io("http://localhost:3333", {
         transports: ["websocket", "polling"],
       });
+      if (updateInterval === "5s") ws.emit("updateInterval", 5000);
+      else if (updateInterval === "10s") ws.emit("updateInterval", 10000);
+      else ws.emit("updateInterval", 1000);
     }
   }, []);
 

@@ -1,11 +1,6 @@
 import LiveChart from "./LiveChartRui";
 import "./App.css";
 import { useState } from "react";
-import { io } from "socket.io-client";
-let ws: any = null;
-ws = io("http://localhost:3333", {
-  transports: ["websocket", "polling"],
-});
 
 function App() {
   const [type, setType] = useState("LineChart");
@@ -16,11 +11,10 @@ function App() {
 
   return (
     <div>
-      <LiveChart updateInterval="1s" />
-      {/* <div
+      <div
         className="App"
         style={{
-          height: "80vh",
+          minHeight: "80vh",
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
@@ -75,7 +69,7 @@ function App() {
         <button className="btnStyle" onClick={handler}>
           {type}
         </button>
-      </div> */}
+      </div>
     </div>
   );
 }

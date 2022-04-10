@@ -5,7 +5,13 @@ const ws = require("socket.io")(httpServer, {
   transports: ["websocket", "polling"],
 });
 
+let updateInterval = 1000;
+
 ws.on("connection", (client) => {
+  client.on("updateInterval", (value) => {
+    updateInterval = value;
+  });
+
   setInterval(() => {
     os.cpuUsage((percentage) => {
       client.emit("cpu", {
@@ -25,7 +31,7 @@ ws.on("connection", (client) => {
         yAxis: Math.round(value * 100),
       });
     });
-  }, 1000);
+  }, updateInterval);
 });
 
 ws.on("end", function () {
