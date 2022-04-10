@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
   Label,
   Legend,
@@ -10,80 +13,82 @@ import {
   YAxis,
 } from "recharts";
 
-import { io } from "socket.io-client";
-
 interface LiveChartProps {
+  /** @type {number} : Enter range value in minutes*/
   range?: number;
+
+  /** @type { string } : Enter the string to displayed at head of graph */
+  name?: string;
+
+  /** @type { string } : Choose which graph to render*/
   type?: "cpu" | "free" | "cpuFree";
-  wsUrl?: string;
+
+  /** @type { string } : Enter the websocket url (websocket must emit object in format { key: value, key: value } where first key is xAxis & second key is yAxis )*/
+  ws?: string;
+
+  /** @type { number } : Choose width of graph*/
   width?: number;
+
+  /** @type { number } : Choose height of graph*/
   height?: number;
-  // updateTime?: object;
-  // graphType?: "LineChart" | "AreaChart"
-  defaultProps?: object;
+
+  /** @type { string } : Choose the update interval for default WS ( Incase of custom ws emit on favourable intervals ) */
+  updateInterval?: "1s" | "30s" | "1m";
+
+  /** @type { string } : Choose the type of graph to render */
+  graphType?: "LineChart" | "AreaChart";
+
+  /** @type { string } : Select the theme for the graph */
+  theme?: "light" | "dark";
+
+  /** @type { object } : Style the main div of the graph */
+  style?: object;
 }
 
+let ws: any = null;
+
 function LiveChart({
-  range = 2,
+  range = 5,
+  name = "Chart Visualization",
   type = "cpu",
-  wsUrl = "http://localhost:3333",
   width = 400,
   height = 300,
+  updateInterval = "1s",
+  graphType = "LineChart",
+  ...props
 }: LiveChartProps) {
   const newRange = new Array(range * 60).fill(0);
 
-  let ws: any;
   useEffect(() => {
-    ws = io(wsUrl, {
-      transports: ["websocket", "polling"],
-    });
+    if (props.ws != undefined) ws = props.ws;
+    else {
+      ws = io("http://localhost:3333", {
+        transports: ["websocket", "polling"],
+      });
+    }
   }, []);
 
-  const [cpu, setCpu] = useState(newRange);
-  if (type === "cpu") {
-    useEffect(() => {
-      ws.on("cpu", (percentage: number) => {
-        setCpu((currentData: any): any => {
-          const temp = [...currentData, percentage];
-          temp.shift();
-          return temp;
-        });
+  let [data, setData] = useState(newRange);
+  useEffect(() => {
+    ws.on(type, (value: number) => {
+      setData((currentData: any): any => {
+        const temp = [...currentData, value];
+        temp.shift();
+        return temp;
       });
-    }, []);
-  }
+    });
 
-  const [free, setFree] = useState(newRange);
-  if (type === "free") {
-    useEffect(() => {
-      ws.on("free", (percentage: number) => {
-        setFree((currentData) => {
-          const temp = [...currentData, percentage];
-          temp.shift();
-          return temp;
-        });
-      });
-    }, []);
-  }
-
-  const [cpuFree, setCpuFree] = useState(newRange);
-  if (type === "cpuFree") {
-    useEffect(() => {
-      ws.on("cpuFree", (value: number) => {
-        setCpuFree((currentData) => {
-          const temp = [...currentData, value];
-          temp.shift();
-          return temp;
-        });
-      });
-    }, []);
-  }
+    return () => {
+      setData([]);
+    };
+  }, []);
 
   return (
-    <div>
-      {type === "cpu" && (
-        <LineChart width={width} height={height} data={cpu}>
+    <div style={props.style}>
+      {graphType === "LineChart" && (
+        <LineChart width={width} height={height} data={data}>
           <Legend verticalAlign="top" height={36} />
-          <XAxis tick={false} dataKey="second" padding={{ right: 50 }}>
+          <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
             <Label
               style={{
                 textAnchor: "middle",
@@ -94,7 +99,10 @@ function LiveChart({
               value={"Time seconds"}
             />
           </XAxis>
-          <YAxis dataKey="value">
+          <YAxis
+            dataKey="yAxis"
+            tickFormatter={(number) => `${number.toFixed(0)}`}
+          >
             <Label
               dx={-15}
               style={{
@@ -107,59 +115,34 @@ function LiveChart({
               position="middle"
             />
           </YAxis>
-          <Tooltip />
+          <Tooltip formatter={(value: any) => value + " %"} />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
           <Line
             dot={false}
             isAnimationActive={false}
-            name="CPU Utilization"
-            dataKey="value"
+            name={name}
+            dataKey="yAxis"
           />
         </LineChart>
       )}
 
-      {type === "free" && (
-        <LineChart width={width} height={height} data={free}>
-          <Legend verticalAlign="top" height={36} />
-          <XAxis tick={false} dataKey="second">
-            <Label
-              style={{
-                textAnchor: "middle",
-                fontSize: "75%",
-                padding: "100px",
-                fill: "grey",
-              }}
-              value={"Time seconds"}
-            />
-          </XAxis>
-          <YAxis dataKey="value">
-            <Label
-              dx={-15}
-              style={{
-                textAnchor: "middle",
-                fontSize: "75%",
-                fill: "grey",
-              }}
-              angle={270}
-              value={"Percentage %"}
-              position="middle"
-            />
-          </YAxis>
-          <Tooltip />
-          <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          <Line
-            dot={false}
+      {graphType === "AreaChart" && (
+        <AreaChart width={width} height={height} data={data}>
+          <defs>
+            <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#2451B7" stopOpacity={0.4} />
+              <stop offset="100%" stopColor="#2451B7" stopOpacity={0.05} />
+            </linearGradient>
+          </defs>
+          <Area
+            name={name}
+            dataKey="yAxis"
             isAnimationActive={false}
-            name="RAM Utilization"
-            dataKey="value"
+            fill="url(#color)"
           />
-        </LineChart>
-      )}
+          <Legend verticalAlign="top" height={36} />
 
-      {type === "cpuFree" && (
-        <LineChart width={width} height={height} data={cpuFree}>
-          <Legend verticalAlign="top" height={36} />
-          <XAxis tick={false} dataKey="second">
+          <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
             <Label
               style={{
                 textAnchor: "middle",
@@ -170,7 +153,10 @@ function LiveChart({
               value={"Time seconds"}
             />
           </XAxis>
-          <YAxis dataKey="value">
+          <YAxis
+            dataKey="yAxis"
+            tickFormatter={(number) => `${number.toFixed(0)}`}
+          >
             <Label
               dx={-15}
               style={{
@@ -183,15 +169,9 @@ function LiveChart({
               position="middle"
             />
           </YAxis>
-          <Tooltip />
-          <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          <Line
-            dot={false}
-            isAnimationActive={false}
-            name="CPU Available"
-            dataKey="value"
-          />
-        </LineChart>
+          <Tooltip formatter={(value: any) => value + " %"} />
+          <CartesianGrid stroke="#eee" strokeDasharray="5" />
+        </AreaChart>
       )}
     </div>
   );

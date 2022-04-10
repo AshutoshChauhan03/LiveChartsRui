@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.btnStyle {
+    padding: 10px 20px;
+    color: blue;    background-color: transparent;    
+    border: 2px solid blue;
+    border-radius: 5px;
+}
+.btnStyle:hover {
+    cursor: pointer;
+    color: white;    background-color: blue;    border: none;    
+    font-weight: bold;
+}
