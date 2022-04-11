@@ -2,7 +2,7 @@ const httpServer = require("http").createServer();
 const os = require("os-utils");
 
 const ws = require("socket.io")(httpServer, {
-  transports: ["websocket", "polling"],
+  transports: ["websocket"],
 });
 
 let updateInterval = 1000;

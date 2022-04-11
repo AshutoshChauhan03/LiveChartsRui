@@ -66,11 +66,11 @@ function LiveChart({
     if (props.ws != undefined) ws = props.ws;
     else {
       ws = io("http://localhost:3333", {
-        transports: ["websocket", "polling"],
+        transports: ["websocket"],
       });
       if (updateInterval === "5s") ws.emit("updateInterval", 5000);
       else if (updateInterval === "10s") ws.emit("updateInterval", 10000);
-      else ws.emit("updateInterval", 1000);
+      else ws.emit("updateInterval", 100);
     }
   }, []);
 
@@ -92,92 +92,153 @@ function LiveChart({
   return (
     <div style={props.style}>
       {graphType === "LineChart" && (
-        <LineChart width={width} height={height} data={data}>
-          <Legend verticalAlign="top" height={36} />
-          <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
-            <Label
-              style={{
-                textAnchor: "middle",
-                fontSize: "75%",
-                padding: "100px",
-                fill: "grey",
-              }}
-              value={"Time seconds"}
+        <>
+          <LineChart width={width} height={height} data={data}>
+            <Legend verticalAlign="top" height={36} />
+            <CartesianGrid stroke="#eee" strokeDasharray="8" />
+
+            <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
+              <Label
+                style={{
+                  textAnchor: "middle",
+                  fontSize: "75%",
+                  padding: "100px",
+                  fill: "#666666",
+                }}
+                value={"Time seconds"}
+              />
+            </XAxis>
+            <YAxis
+              dataKey="yAxis"
+              tickFormatter={(number) => `${number.toFixed(0)}`}
+            >
+              <Label
+                dx={-15}
+                style={{
+                  textAnchor: "middle",
+                  fontSize: "75%",
+                  fill: "#666666",
+                }}
+                angle={270}
+                value={"Percentage %"}
+                position="middle"
+              />
+            </YAxis>
+            <Tooltip formatter={(value: any) => value + " %"} />
+            <Line
+              dot={false}
+              isAnimationActive={false}
+              name={name}
+              dataKey="yAxis"
             />
-          </XAxis>
-          <YAxis
-            dataKey="yAxis"
-            tickFormatter={(number) => `${number.toFixed(0)}`}
+          </LineChart>
+          <div
+            style={{
+              display: "flex",
+              marginTop: "2vh",
+              alignItems: "center",
+            }}
           >
-            <Label
-              dx={-15}
+            <hr
               style={{
-                textAnchor: "middle",
-                fontSize: "75%",
-                fill: "grey",
+                width: "3vw",
+                backgroundColor: "#2451B7",
+                opacity: "0.5",
+                border: "none",
+                height: "2px",
+                marginLeft: "4vw",
+                borderRadius: "2px",
+                display: "inline-block",
               }}
-              angle={270}
-              value={"Percentage %"}
-              position="middle"
             />
-          </YAxis>
-          <Tooltip formatter={(value: any) => value + " %"} />
-          <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-          <Line
-            dot={false}
-            isAnimationActive={false}
-            name={name}
-            dataKey="yAxis"
-          />
-        </LineChart>
+            <p
+              style={{
+                marginLeft: "10px",
+                fontSize: "14px",
+              }}
+            >
+              Value in percentage
+            </p>
+          </div>
+        </>
       )}
 
       {graphType === "AreaChart" && (
-        <AreaChart width={width} height={height} data={data}>
-          <defs>
-            <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2451B7" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="#2451B7" stopOpacity={0.05} />
-            </linearGradient>
-          </defs>
-          <Area
-            name={name}
-            dataKey="yAxis"
-            isAnimationActive={false}
-            fill="url(#color)"
-          />
-          <Legend verticalAlign="top" height={36} />
+        <>
+          <AreaChart width={width} height={height} data={data}>
+            <defs>
+              <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#2451B7" stopOpacity={0.4} />
+                <stop offset="100%" stopColor="#2451B7" stopOpacity={0.05} />
+              </linearGradient>
+            </defs>
+            <Area
+              name={name}
+              dataKey="yAxis"
+              isAnimationActive={false}
+              fill="url(#color)"
+            />
+            <Legend verticalAlign="top" height={36} />
+            <CartesianGrid strokeDasharray="8" stroke="#DFE2E6" />
 
-          <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
-            <Label
-              style={{
-                textAnchor: "middle",
-                fontSize: "75%",
-                padding: "100px",
-                fill: "grey",
-              }}
-              value={"Time seconds"}
-            />
-          </XAxis>
-          <YAxis
-            dataKey="yAxis"
-            tickFormatter={(number) => `${number.toFixed(0)}`}
+            <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
+              <Label
+                style={{
+                  textAnchor: "middle",
+                  fontSize: "75%",
+                  padding: "100px",
+                  fill: "#666666",
+                }}
+                value={"Time seconds"}
+              />
+            </XAxis>
+            <YAxis
+              dataKey="yAxis"
+              tickFormatter={(number) => `${number.toFixed(0)}`}
+            >
+              <Label
+                dx={-15}
+                style={{
+                  textAnchor: "middle",
+                  fontSize: "75%",
+                  fill: "#666666",
+                }}
+                angle={270}
+                value={"Percentage %"}
+                position="middle"
+              />
+            </YAxis>
+            <Tooltip formatter={(value: any) => value + " %"} />
+          </AreaChart>
+          <div
+            style={{
+              display: "flex",
+              marginTop: "2vh",
+              alignItems: "center",
+            }}
           >
-            <Label
-              dx={-15}
+            <hr
               style={{
-                textAnchor: "middle",
-                fontSize: "75%",
-                fill: "grey",
+                width: "3vw",
+                backgroundColor: "#2451B7",
+                opacity: "0.5",
+                border: "none",
+                height: "2px",
+                marginLeft: "4vw",
+                borderRadius: "2px",
+                display: "inline-block",
               }}
-              angle={270}
-              value={"Percentage %"}
-              position="middle"
             />
-          </YAxis>
-          <Tooltip formatter={(value: any) => value + " %"} />
-          <CartesianGrid stroke="#eee" strokeDasharray="5" />
-        </AreaChart>
+            <p
+              style={{
+                marginLeft: "10px",
+                fontSize: "14px",
+              }}
+            >
+              Value in percentage
+            </p>
+          </div>
+        </>
       )}
     </div>
   );
