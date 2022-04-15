@@ -23,8 +23,8 @@ interface LiveChartProps {
   /** @type { string } : Choose which graph to render*/
   type?: "cpu" | "free" | "cpuFree";
 
-  /** @type { string } : Enter the websocket url (websocket must emit object in format { xAxis: value, yAxis: value } */
-  ws?: string;
+  /** @type { string } : Provide websocket connection (websocket must emit object in format { xAxis: value, yAxis: value } */
+  ws?: any;
 
   /** @type { number } : Choose width of graph*/
   width?: number;
@@ -32,7 +32,8 @@ interface LiveChartProps {
   /** @type { number } : Choose height of graph*/
   height?: number;
 
-  /** @type { string } : Choose the update interval for default WS ( Incase of custom ws emit on favourable intervals ) */
+  /** @type { string } : Choose the update interval for default WS ( Incase of custom ws emit on favourable intervals )
+   * Livechart emit on connected socket as -> ws.emit("updateInterval", updateInterval, type)*/
   updateInterval?: "1s" | "5s" | "10s";
 
   /** @type { string } : Choose the type of graph to render */
@@ -52,7 +53,6 @@ let ws: any = null;
 
 function LiveChart({
   range = 5,
-  name = "Chart Visualization",
   type = "cpu",
   width = 400,
   height = 300,
@@ -68,9 +68,9 @@ function LiveChart({
       ws = io("http://localhost:3333", {
         transports: ["websocket"],
       });
-      if (updateInterval === "5s") ws.emit("updateInterval", 5000);
-      else if (updateInterval === "10s") ws.emit("updateInterval", 10000);
-      else ws.emit("updateInterval", 100);
+      if (updateInterval === "5s") ws.emit("updateInterval", 5000, type);
+      else if (updateInterval === "10s") ws.emit("updateInterval", 10000, type);
+      else ws.emit("updateInterval", 1000, type);
     }
   }, []);
 
@@ -94,7 +94,8 @@ function LiveChart({
       {graphType === "LineChart" && (
         <>
           <LineChart width={width} height={height} data={data}>
-            <Legend verticalAlign="top" height={36} />
+            {props.name && <Legend verticalAlign="top" height={36} />}
+
             <CartesianGrid stroke="#eee" strokeDasharray="8" />
 
             <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
@@ -128,7 +129,7 @@ function LiveChart({
             <Line
               dot={false}
               isAnimationActive={false}
-              name={name}
+              name={props.name}
               dataKey="yAxis"
             />
           </LineChart>
@@ -173,12 +174,12 @@ function LiveChart({
               </linearGradient>
             </defs>
             <Area
-              name={name}
+              name={props.name}
               dataKey="yAxis"
               isAnimationActive={false}
               fill="url(#color)"
             />
-            <Legend verticalAlign="top" height={36} />
+            {props.name && <Legend verticalAlign="top" height={36} />}
             <CartesianGrid strokeDasharray="8" stroke="#DFE2E6" />
 
             <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>

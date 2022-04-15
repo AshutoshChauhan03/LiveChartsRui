@@ -26,6 +26,7 @@ function App() {
             type="cpu"
             name="CPU Utilization"
             graphType={"AreaChart"}
+            updateInterval="5s"
           />
         )}
         {type !== "AreaChart" && (
