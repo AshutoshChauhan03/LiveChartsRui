@@ -1,6 +1,6 @@
-import LiveChart from "./LiveChartRui";
 import "./App.css";
 import { useState } from "react";
+import LiveChart from "./LiveChartRui/LiveChartRui";
 
 function App() {
   const [type, setType] = useState("LineChart");
@@ -26,7 +26,7 @@ function App() {
             type="cpu"
             name="CPU Utilization"
             graphType={"AreaChart"}
-            updateInterval="5s"
+            updateInterval={3}
           />
         )}
         {type !== "AreaChart" && (

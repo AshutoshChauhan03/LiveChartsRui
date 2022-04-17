@@ -11,6 +11,7 @@ let updateCpuFreeInterval = 1000;
 
 ws.on("connection", (client) => {
   client.on("updateInterval", (value, type) => {
+    value *= 1000;
     if (type == "cpu") updateCpuInterval = value;
     else if (type == "free") updateFreeInterval = value;
     else if (type == "cpuFree") updateCpuFreeInterval = value;
