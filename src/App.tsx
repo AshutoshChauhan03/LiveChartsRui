@@ -22,11 +22,7 @@ function App() {
         }}
       >
         {type !== "AreaChart" && (
-          <LiveChart
-            type="cpu"
-            name="CPU Utilization"
-            graphType={"AreaChart"}
-          />
+          <LiveChart type="cpu" name="CPU Utilization" graphType={"BarChart"} />
         )}
         {type !== "AreaChart" && (
           <LiveChart type="free" name="RAM Available" graphType={"AreaChart"} />
@@ -43,7 +39,7 @@ function App() {
           <LiveChart
             type="cpu"
             name="CPU Utilization"
-            graphType={"LineChart"}
+            graphType={"BarChart"}
             threshold={15}
             thresholdCallBack={(value) => {
               console.log("Threshold -> " + JSON.stringify(value));
@@ -65,9 +61,6 @@ function App() {
             graphType={"LineChart"}
           />
         )}
-      </div>
-      <div>
-        <LiveChart graphType="BarChart" />
       </div>
       <div
         className="btns"

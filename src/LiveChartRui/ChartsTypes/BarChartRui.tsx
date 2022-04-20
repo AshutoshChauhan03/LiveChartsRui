@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import "./BarChartRui.css";
 
 function BarChartRui(props: any) {
   return (
@@ -44,29 +45,29 @@ function BarChartRui(props: any) {
           />
         </YAxis>
         <Tooltip cursor={false} formatter={(value: any) => value + " %"} />
-        <div
+      </BarChart>
+      <div
+        style={{
+          display: "flex",
+          marginTop: "2vh",
+          alignItems: "center",
+        }}
+      >
+        <hr
+          className="lineStyle"
           style={{
-            display: "flex",
-            marginTop: "2vh",
-            alignItems: "center",
+            backgroundColor: props.theme?.stroke || "#8884d8",
+          }}
+        />
+        <p
+          style={{
+            marginLeft: "10px",
+            fontSize: "12px",
           }}
         >
-          <hr
-            className="lineStyle"
-            style={{
-              backgroundColor: props.theme?.stroke || "#8884d8",
-            }}
-          />
-          <p
-            style={{
-              marginLeft: "10px",
-              fontSize: "12px",
-            }}
-          >
-            Value in percentage
-          </p>
-        </div>
-      </BarChart>
+          Value in percentage
+        </p>
+      </div>
     </>
   );
 }
