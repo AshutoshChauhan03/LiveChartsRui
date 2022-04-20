@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Area,
   AreaChart,
@@ -9,26 +8,41 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import LiveChartProps from "../LivechartProps";
+import "./LineChartRui.css";
 
-function AreaChartRui(props: LiveChartProps) {
+function AreaChartRui(props: any) {
+  if (props.theme?.stroke != undefined) {
+    console.log(props.theme.stroke);
+  }
+
   return (
     <>
+      <div className="upperDiv">
+        <h2>{props.name}</h2>
+      </div>
       <AreaChart width={props.width} height={props.height} data={props.data}>
         <defs>
           <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2451B7" stopOpacity={0.4} />
-            <stop offset="100%" stopColor="#2451B7" stopOpacity={0.05} />
+            <stop
+              offset="0%"
+              stopColor={props.theme?.stroke || "#82ca9d"}
+              stopOpacity={0.6}
+            />
+            <stop
+              offset="100%"
+              stopColor={props.theme?.stroke || "#82ca9d"}
+              stopOpacity={0.05}
+            />
           </linearGradient>
         </defs>
+        <CartesianGrid strokeDasharray="8" stroke="#DFE2E6" />
         <Area
-          name={props.name}
+          name="yAxis"
           dataKey="yAxis"
           isAnimationActive={false}
+          stroke={props.theme?.stroke || "#82ca9d"}
           fill="url(#color)"
         />
-        {props.name && <Legend verticalAlign="top" height={36} />}
-        <CartesianGrid strokeDasharray="8" stroke="#DFE2E6" />
 
         <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
           <Label
@@ -64,15 +78,9 @@ function AreaChartRui(props: LiveChartProps) {
         }}
       >
         <hr
+          className="lineStyle"
           style={{
-            width: "3vw",
-            backgroundColor: "#2451B7",
-            opacity: "0.5",
-            border: "none",
-            height: "2px",
-            marginLeft: "4vw",
-            borderRadius: "2px",
-            display: "inline-block",
+            backgroundColor: props.theme?.stroke || "#82ca9d",
           }}
         />
         <p

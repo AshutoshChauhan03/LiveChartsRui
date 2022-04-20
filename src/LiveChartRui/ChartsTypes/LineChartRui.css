@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+.upperDiv {
+    font-size: 11px;
+    padding: 0 0 20px 80px;
+}
+
+.lineStyle {
+    width: 2.5vw;
+    opacity: 0.5;
+    border: none;
+    height: 2px;
+    margin-left: 4vw;
+    border-radius: 2px;
+    display: inline-block;
+}

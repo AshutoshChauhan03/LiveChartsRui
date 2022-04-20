@@ -8,8 +8,8 @@ export default interface LiveChartProps {
   /** @type { string } : Choose which graph to render*/
   type?: "cpu" | "free" | "cpuFree";
 
-  /** */
-  data?: number[];
+  /** @type { {}[] : List of object containing xAxis and yAxis mapping } */
+  data?: {}[];
   
   /** @type { string } : Provide websocket connection (websocket must emit object in format { xAxis: value, yAxis: value } */
   ws?: any;
@@ -29,6 +29,7 @@ export default interface LiveChartProps {
 
   /** @type { string } : Select the theme for the graph */
   theme?: {
+    stroke: string;
     CartesianGrid?: string;
     Legend_verticalAlign?: string;
   };
@@ -36,6 +37,8 @@ export default interface LiveChartProps {
   /** @type { object } : Style the main div of the graph */
   style?: object;
 
+  /** @type { number } : Set threshold for graph ( yAxis ) */
   threshold?: number;
+  /** @type { number } : Callback when threshold is reached ( yAxis ) */
   thresholdCallBack?: (err: any) => void;
 }

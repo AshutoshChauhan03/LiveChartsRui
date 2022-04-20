@@ -26,7 +26,6 @@ function App() {
             type="cpu"
             name="CPU Utilization"
             graphType={"AreaChart"}
-            updateInterval={3}
           />
         )}
         {type !== "AreaChart" && (
@@ -45,10 +44,19 @@ function App() {
             type="cpu"
             name="CPU Utilization"
             graphType={"LineChart"}
+            threshold={15}
+            thresholdCallBack={(value) => {
+              console.log("Threshold -> " + JSON.stringify(value));
+            }}
           />
         )}
         {type !== "LineChart" && (
-          <LiveChart type="free" name="RAM Available" graphType={"LineChart"} />
+          <LiveChart
+            theme={{ stroke: "#9FE2BF" }}
+            type="free"
+            name="RAM Available"
+            graphType={"LineChart"}
+          />
         )}
         {type !== "LineChart" && (
           <LiveChart
