@@ -25,7 +25,7 @@ export default interface LiveChartProps {
   updateInterval?: number;
 
   /** @type { string } : Choose the type of graph to render */
-  graphType?: "LineChart" | "AreaChart";
+  graphType?: "LineChart" | "AreaChart" | "BarChart";
 
   /** @type { string } : Select the theme for the graph */
   theme?: {

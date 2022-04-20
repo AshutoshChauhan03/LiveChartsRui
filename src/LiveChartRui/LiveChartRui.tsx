@@ -3,12 +3,13 @@ import { io } from "socket.io-client";
 import LiveChartProps from "./LivechartProps";
 import AreaChartRui from "./ChartsTypes/AreaChartRui";
 import LineChartRui from "./ChartsTypes/LineChartRui";
+import BarChartRui from "./ChartsTypes/BarChartRui";
 
 let ws: any = null;
 let yList: {}[] = [];
 
 function LiveChart({
-  range = 3,
+  range = 2,
   type = "cpu",
   width = 425,
   height = 225,
@@ -72,6 +73,15 @@ function LiveChart({
       )}
       {graphType === "AreaChart" && (
         <AreaChartRui
+          width={width}
+          height={height}
+          data={data}
+          name={props.name}
+          theme={props.theme}
+        />
+      )}
+      {graphType === "BarChart" && (
+        <BarChartRui
           width={width}
           height={height}
           data={data}

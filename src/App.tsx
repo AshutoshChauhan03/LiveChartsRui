@@ -66,6 +66,9 @@ function App() {
           />
         )}
       </div>
+      <div>
+        <LiveChart graphType="BarChart" />
+      </div>
       <div
         className="btns"
         style={{

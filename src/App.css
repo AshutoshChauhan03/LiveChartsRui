@@ -5,12 +5,13 @@
 
 .btnStyle {
     padding: 10px 20px;
-    color: blue;    background-color: transparent;    
-    border: 2px solid blue;
+    font-weight: bold;
+    color: black;    background-color: transparent;    
+    border: 2px solid #AAB7B8;
     border-radius: 5px;
 }
 .btnStyle:hover {
     cursor: pointer;
-    color: white;    background-color: blue;    border: none;    
+    color: white;    background-color: #AAB7B8;    border: none;    
     font-weight: bold;
 }
