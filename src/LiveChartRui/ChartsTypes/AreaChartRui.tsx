@@ -15,6 +15,9 @@ function AreaChartRui(props: any) {
     console.log(props.theme.stroke);
   }
 
+  let randomKey = Math.random().toString();
+  let fillString = `url(#${randomKey})`;
+
   return (
     <>
       <div className="upperDiv">
@@ -22,7 +25,7 @@ function AreaChartRui(props: any) {
       </div>
       <AreaChart width={props.width} height={props.height} data={props.data}>
         <defs>
-          <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={randomKey} x1="0" y1="0" x2="0" y2="1">
             <stop
               offset="0%"
               stopColor={props.theme?.stroke || "#82ca9d"}
@@ -37,11 +40,11 @@ function AreaChartRui(props: any) {
         </defs>
         <CartesianGrid strokeDasharray="8" stroke="#DFE2E6" />
         <Area
-          name="yAxis"
+          name={props.yAxisName}
           dataKey="yAxis"
           isAnimationActive={false}
           stroke={props.theme?.stroke || "#82ca9d"}
-          fill="url(#color)"
+          fill={fillString}
         />
 
         <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>

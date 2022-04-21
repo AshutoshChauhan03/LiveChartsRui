@@ -1,6 +1,12 @@
 import "./App.css";
 import { useState } from "react";
+import { io } from "socket.io-client";
 import LiveChart from "./LiveChartRui/LiveChartRui";
+
+let ws: any = null;
+ws = io("http://localhost:3333", {
+  transports: ["websocket"],
+});
 
 function App() {
   const [type, setType] = useState("LineChart");
@@ -22,6 +28,7 @@ function App() {
         }}
       >
         <LiveChart
+          ws={ws}
           type="cpu"
           range={0.5}
           threshold={21}
@@ -32,10 +39,16 @@ function App() {
           graphType={"BarChart"}
         />
         {type !== "AreaChart" && (
-          <LiveChart type="free" name="RAM Available" graphType={"AreaChart"} />
+          <LiveChart
+            ws={ws}
+            type="free"
+            name="RAM Available"
+            graphType={"AreaChart"}
+          />
         )}
         {type !== "AreaChart" && (
           <LiveChart
+            ws={ws}
             type="cpuFree"
             name="CPU Available"
             graphType={"AreaChart"}
@@ -43,6 +56,7 @@ function App() {
         )}
         {type !== "LineChart" && (
           <LiveChart
+            ws={ws}
             theme={{ stroke: "#008000" }}
             type="free"
             name="RAM Available"
@@ -51,6 +65,7 @@ function App() {
         )}
         {type !== "LineChart" && (
           <LiveChart
+            ws={ws}
             type="cpuFree"
             name="CPU Available"
             graphType={"LineChart"}

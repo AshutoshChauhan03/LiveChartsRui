@@ -6,7 +6,6 @@ import LineChartRui from "./ChartsTypes/LineChartRui";
 import BarChartRui from "./ChartsTypes/BarChartRui";
 
 let ws: any = null;
-let yList: {}[] = [];
 
 function LiveChart({
   range = 2,
@@ -24,6 +23,10 @@ function LiveChart({
     if (props.data == undefined) {
       if (props.ws != undefined) ws = props.ws;
       else {
+        console.log(
+          "<--- No socket connection provided connecting to default socket --->"
+        );
+
         ws = io("http://localhost:3333", {
           transports: ["websocket"],
         });
@@ -43,9 +46,6 @@ function LiveChart({
           props.thresholdCallBack(value);
 
         setData((currentData: any): any => {
-          yList = Object.entries(value);
-          yList.shift();
-
           const temp = [...currentData, value];
           temp.shift();
           return temp;
@@ -68,7 +68,7 @@ function LiveChart({
             data={data}
             name={props.name}
             theme={props.theme}
-            yList={yList}
+            yAxisName={props.yAxisName}
           />
         </>
       )}
@@ -79,7 +79,7 @@ function LiveChart({
           data={data}
           name={props.name}
           theme={props.theme}
-          yList={yList}
+          yAxisName={props.yAxisName}
         />
       )}
       {graphType === "BarChart" && (
@@ -89,6 +89,7 @@ function LiveChart({
           data={data}
           name={props.name}
           theme={props.theme}
+          yAxisName={props.yAxisName}
         />
       )}
     </div>

@@ -5,8 +5,11 @@ export default interface LiveChartProps {
   /** @type { string } : Enter the string to displayed at head of graph */
   name?: string;
 
-  /** @type { string } : Choose which graph to render*/
-  type?: "cpu" | "free" | "cpuFree";
+  /** @type { string } : Enter the name to displayed at yAxis place */
+  yAxisName?: string;
+
+  /** @type { string } : Choose which graph to render ( Give your socket emit name here ) */
+  type?: "cpu" | "free" | "cpuFree" | string;
 
   /** @type { {}[] : List of object containing xAxis and yAxis mapping } */
   data?: {}[];
@@ -31,7 +34,6 @@ export default interface LiveChartProps {
   theme?: {
     stroke: string;
     CartesianGrid?: string;
-    Legend_verticalAlign?: string;
   };
 
   /** @type { object } : Style the main div of the graph */
