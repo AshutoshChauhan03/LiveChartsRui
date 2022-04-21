@@ -44,6 +44,7 @@ function LiveChart({
 
         setData((currentData: any): any => {
           yList = Object.entries(value);
+          yList.shift();
 
           const temp = [...currentData, value];
           temp.shift();
@@ -78,6 +79,7 @@ function LiveChart({
           data={data}
           name={props.name}
           theme={props.theme}
+          yList={yList}
         />
       )}
       {graphType === "BarChart" && (

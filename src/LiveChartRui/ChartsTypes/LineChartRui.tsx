@@ -10,8 +10,6 @@ import {
 import "./LineChartRui.css";
 
 function LineChartRui(props: any) {
-  // props.yList.shift();
-
   return (
     <>
       <div className="upperDiv">
@@ -19,16 +17,19 @@ function LineChartRui(props: any) {
       </div>
       <LineChart width={props.width} height={props.height} data={props.data}>
         <CartesianGrid stroke="#eee" strokeDasharray="8" />
-        {/* {props.yList.map((ele: any) => {
-          console.log(ele); */}
-        <Line
-          dot={false}
-          isAnimationActive={false}
-          name={"yAxis"}
-          dataKey={"yAxis"}
-          stroke={props.theme?.stroke || "#8884d8"}
-        />
-        ;{/* })} */}
+        {props.yList.map((ele: any) => {
+          return (
+            <Line
+              dot={false}
+              key={ele[0]}
+              isAnimationActive={false}
+              name={ele[0]}
+              dataKey={ele[0]}
+              stroke={props.theme?.stroke || "#8884d8"}
+            />
+          );
+        })}
+
         <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
           <Label
             style={{

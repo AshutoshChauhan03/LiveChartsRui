@@ -30,6 +30,9 @@ ws.on("connection", (client) => {
     client.emit("free", {
       xAxis: new Date().toLocaleString("en-US"),
       yAxis: Math.round(os.freememPercentage() * 100),
+      // cpu: Math.round(os.freememPercentage() * 100),
+      // free: Math.round(os.freememPercentage() * 50),
+      // cpurFree: Math.round(os.freememPercentage() * 75),
     });
   }, updateFreeInterval);
 

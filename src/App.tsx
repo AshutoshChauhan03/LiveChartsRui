@@ -21,9 +21,16 @@ function App() {
           flexWrap: "wrap",
         }}
       >
-        {type !== "AreaChart" && (
-          <LiveChart type="cpu" name="CPU Utilization" graphType={"BarChart"} />
-        )}
+        <LiveChart
+          type="cpu"
+          range={0.5}
+          threshold={21}
+          thresholdCallBack={(err) => {
+            console.log("Threshold touched : " + JSON.stringify(err));
+          }}
+          name="CPU Utilization"
+          graphType={"BarChart"}
+        />
         {type !== "AreaChart" && (
           <LiveChart type="free" name="RAM Available" graphType={"AreaChart"} />
         )}
@@ -34,21 +41,9 @@ function App() {
             graphType={"AreaChart"}
           />
         )}
-
         {type !== "LineChart" && (
           <LiveChart
-            type="cpu"
-            name="CPU Utilization"
-            graphType={"BarChart"}
-            threshold={15}
-            thresholdCallBack={(value) => {
-              console.log("Threshold -> " + JSON.stringify(value));
-            }}
-          />
-        )}
-        {type !== "LineChart" && (
-          <LiveChart
-            theme={{ stroke: "#9FE2BF" }}
+            theme={{ stroke: "#008000" }}
             type="free"
             name="RAM Available"
             graphType={"LineChart"}
@@ -80,3 +75,42 @@ function App() {
 }
 
 export default App;
+
+// [
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 43,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 73,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 93,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 23,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 83,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 42,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 13,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 43,
+//   },
+//   {
+//     xAxis: "xAxis",
+//     yAxis: 43,
+//   },
+// ];
