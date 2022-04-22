@@ -9,68 +9,40 @@ ws = io("http://localhost:3333", {
 });
 
 function App() {
-  const [type, setType] = useState("LineChart");
-  let handler = () => {
+  const [type, setType] = useState<"LineChart" | "AreaChart" | "BarChart">(
+    "LineChart"
+  );
+  let typeHandler = () => {
     if (type == "LineChart") setType("AreaChart");
     else setType("LineChart");
   };
 
   return (
     <div>
-      <div
-        className="App"
-        style={{
-          minHeight: "80vh",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
+      <div className="container">
         <LiveChart
           ws={ws}
-          type="cpu"
+          on="cpu"
+          updateInterval={2}
           range={0.5}
+          name="CPU Utilization"
+          graphType={"BarChart"}
           threshold={21}
           thresholdCallBack={(err) => {
             console.log("Threshold touched : " + JSON.stringify(err));
           }}
-          name="CPU Utilization"
-          graphType={"BarChart"}
         />
-        {type !== "AreaChart" && (
-          <LiveChart
-            ws={ws}
-            type="free"
-            name="RAM Available"
-            graphType={"AreaChart"}
-          />
-        )}
-        {type !== "AreaChart" && (
-          <LiveChart
-            ws={ws}
-            type="cpuFree"
-            name="CPU Available"
-            graphType={"AreaChart"}
-          />
-        )}
-        {type !== "LineChart" && (
-          <LiveChart
-            ws={ws}
-            theme={{ stroke: "#008000" }}
-            type="free"
-            name="RAM Available"
-            graphType={"LineChart"}
-          />
-        )}
-        {type !== "LineChart" && (
-          <LiveChart
-            ws={ws}
-            type="cpuFree"
-            name="CPU Available"
-            graphType={"LineChart"}
-          />
-        )}
+
+        <LiveChart
+          ws={ws}
+          range={60}
+          on="free"
+          name="RAM Available"
+          theme={{ stroke: "red" }}
+          graphType={type}
+        />
+
+        <LiveChart ws={ws} on="cpuFree" name="CPU Available" graphType={type} />
       </div>
       <div
         className="btns"
@@ -81,7 +53,7 @@ function App() {
           alignItems: "center",
         }}
       >
-        <button className="btnStyle" onClick={handler}>
+        <button className="btnStyle" onClick={typeHandler}>
           {type}
         </button>
       </div>

@@ -9,20 +9,23 @@ let ws: any = null;
 
 function LiveChart({
   range = 2,
-  type = "cpu",
+  on = "cpu",
   width = 425,
   height = 225,
   updateInterval = 1,
   graphType = "LineChart",
   threshold = 100,
+  bottomName = "Value in percentage",
   ...props
 }: LiveChartProps) {
   const newRange = new Array(range * 60).fill(0);
 
   useEffect(() => {
     if (props.data == undefined) {
-      if (props.ws != undefined) ws = props.ws;
-      else {
+      if (props.ws != undefined) {
+        ws = props.ws;
+        if (ws.connected) console.log(`<--- Connected to given socket --->`);
+      } else {
         console.log(
           "<--- No socket connection provided connecting to default socket --->"
         );
@@ -31,7 +34,7 @@ function LiveChart({
           transports: ["websocket"],
         });
       }
-      ws.emit("updateInterval", updateInterval, type);
+      ws.emit("updateInterval", updateInterval, on);
     }
   }, []);
 
@@ -41,7 +44,7 @@ function LiveChart({
     if (props.data != undefined) {
       setData(props.data);
     } else {
-      ws.on(type, (value: any) => {
+      ws.on(on, (value: any) => {
         if (value.yAxis > threshold && props.thresholdCallBack)
           props.thresholdCallBack(value);
 
@@ -69,6 +72,7 @@ function LiveChart({
             name={props.name}
             theme={props.theme}
             yAxisName={props.yAxisName}
+            bottomName={bottomName}
           />
         </>
       )}
@@ -80,6 +84,7 @@ function LiveChart({
           name={props.name}
           theme={props.theme}
           yAxisName={props.yAxisName}
+          bottomName={bottomName}
         />
       )}
       {graphType === "BarChart" && (
@@ -90,6 +95,7 @@ function LiveChart({
           name={props.name}
           theme={props.theme}
           yAxisName={props.yAxisName}
+          bottomName={bottomName}
         />
       )}
     </div>

@@ -69,7 +69,7 @@ function BarChartRui(props: any) {
             fontSize: "12px",
           }}
         >
-          Value in percentage
+          {props.bottomName}
         </p>
       </div>
     </>

@@ -5,13 +5,15 @@ export default interface LiveChartProps {
   /** @type { string } : Enter the string to displayed at head of graph */
   name?: string;
 
-  /** @type { string } : Enter the name to displayed at yAxis place */
+  /** @type { string } : Enter the name to display at yAxis place */
   yAxisName?: string;
+  /** @type { string } : Enter the string to display at bottom div place */
+  bottomName?: string;
 
   /** @type { string } : Choose which graph to render ( Give your socket emit name here ) */
-  type?: "cpu" | "free" | "cpuFree" | string;
+  on?: "cpu" | "free" | "cpuFree" | string;
 
-  /** @type { {}[] : List of object containing xAxis and yAxis mapping } */
+  /** @type { {}[] } : List of object containing xAxis and yAxis mapping } */
   data?: {}[];
   
   /** @type { string } : Provide websocket connection (websocket must emit object in format { xAxis: value, yAxis: value } */
@@ -24,7 +26,7 @@ export default interface LiveChartProps {
   height?: number;
 
   /** @type { string } : Enter the update interval for default WS in seconds ( Incase of custom ws emit on favourable intervals )
-   * Livechart emit on connected socket as -> ws.emit("updateInterval", updateInterval, type)*/
+   * Livechart emit on connected socket as -> ws.emit("updateInterval", updateInterval, on)*/
   updateInterval?: number;
 
   /** @type { string } : Choose the type of graph to render */

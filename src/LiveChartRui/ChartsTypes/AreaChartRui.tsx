@@ -11,10 +11,6 @@ import {
 import "./LineChartRui.css";
 
 function AreaChartRui(props: any) {
-  if (props.theme?.stroke != undefined) {
-    console.log(props.theme.stroke);
-  }
-
   let randomKey = Math.random().toString();
   let fillString = `url(#${randomKey})`;
 
@@ -29,7 +25,7 @@ function AreaChartRui(props: any) {
             <stop
               offset="0%"
               stopColor={props.theme?.stroke || "#82ca9d"}
-              stopOpacity={0.6}
+              stopOpacity={0.7}
             />
             <stop
               offset="100%"
@@ -89,10 +85,10 @@ function AreaChartRui(props: any) {
         <p
           style={{
             marginLeft: "10px",
-            fontSize: "14px",
+            fontSize: "12px",
           }}
         >
-          Value in percentage
+          {props.bottomName}
         </p>
       </div>
     </>
