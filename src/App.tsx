@@ -23,7 +23,6 @@ function App() {
         <LiveChart
           ws={ws}
           on="cpu"
-          updateInterval={2}
           range={0.5}
           name="CPU Utilization"
           graphType={"BarChart"}
@@ -35,7 +34,8 @@ function App() {
 
         <LiveChart
           ws={ws}
-          range={60}
+          range={1}
+          updateInterval={2}
           on="free"
           name="RAM Available"
           theme={{ stroke: "red" }}

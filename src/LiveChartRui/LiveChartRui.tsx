@@ -6,6 +6,8 @@ import LineChartRui from "./ChartsTypes/LineChartRui";
 import BarChartRui from "./ChartsTypes/BarChartRui";
 
 let ws: any = null;
+let xList: {} = {};
+let yList: {}[] = [];
 
 function LiveChart({
   range = 2,
@@ -49,6 +51,10 @@ function LiveChart({
           props.thresholdCallBack(value);
 
         setData((currentData: any): any => {
+          yList = Object.entries(value);
+          let hold = yList.shift();
+          if (hold != undefined) xList = hold;
+
           const temp = [...currentData, value];
           temp.shift();
           return temp;
@@ -73,6 +79,8 @@ function LiveChart({
             theme={props.theme}
             yAxisName={props.yAxisName}
             bottomName={bottomName}
+            xList={xList}
+            yList={yList}
           />
         </>
       )}
@@ -85,6 +93,8 @@ function LiveChart({
           theme={props.theme}
           yAxisName={props.yAxisName}
           bottomName={bottomName}
+          xList={xList}
+          yList={yList}
         />
       )}
       {graphType === "BarChart" && (
@@ -96,6 +106,8 @@ function LiveChart({
           theme={props.theme}
           yAxisName={props.yAxisName}
           bottomName={bottomName}
+          xList={xList}
+          yList={yList}
         />
       )}
     </div>

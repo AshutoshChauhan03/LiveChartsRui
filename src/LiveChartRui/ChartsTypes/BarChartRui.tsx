@@ -19,12 +19,21 @@ function BarChartRui(props: any) {
       </div>
       <BarChart width={props.width} height={props.height} data={props.data}>
         <CartesianGrid stroke="#eee" strokeDasharray="8" />
-        <Bar
-          isAnimationActive={false}
-          dataKey="yAxis"
-          fill={props.theme?.stroke || "#8884d8"}
-        />
-        <XAxis tick={false} dataKey="xAxis" padding={{ right: 10, left: 10 }}>
+        {props.yList.map((ele: any) => {
+          return (
+            <Bar
+              isAnimationActive={false}
+              key={ele[0]}
+              dataKey={ele[0]}
+              fill={props.theme?.stroke || "#8884d8"}
+            />
+          );
+        })}
+        <XAxis
+          tick={false}
+          dataKey={props.xList[0]}
+          padding={{ right: 10, left: 10 }}
+        >
           <Label
             style={{
               textAnchor: "middle",

@@ -21,7 +21,7 @@ ws.on("connection", (client) => {
     os.cpuUsage((percentage) => {
       client.emit("cpu", {
         xAxis: `Time: ${new Date().toLocaleTimeString("en-US")}`,
-        yAxis: Math.round(percentage * 100),
+        cpu: Math.round(percentage * 100),
       });
     });
   }, updateCpuInterval);
@@ -29,8 +29,7 @@ ws.on("connection", (client) => {
   setInterval(() => {
     client.emit("free", {
       xAxis: `Time: ${new Date().toLocaleTimeString("en-US")}`,
-      yAxis: Math.round(os.freememPercentage() * 100),
-      // cpu: Math.round(os.freememPercentage() * 100),
+      free: Math.round(os.freememPercentage() * 100),
       // free: Math.round(os.freememPercentage() * 50),
       // cpurFree: Math.round(os.freememPercentage() * 75),
     });
@@ -40,7 +39,7 @@ ws.on("connection", (client) => {
     os.cpuFree((value) => {
       client.emit("cpuFree", {
         xAxis: `Time: ${new Date().toLocaleTimeString("en-US")}`,
-        yAxis: Math.round(value * 100),
+        cpuFree: Math.round(value * 100),
       });
     });
   }, updateCpuFreeInterval);

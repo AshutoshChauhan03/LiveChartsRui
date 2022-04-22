@@ -17,16 +17,19 @@ function LineChartRui(props: any) {
       </div>
       <LineChart width={props.width} height={props.height} data={props.data}>
         <CartesianGrid stroke="#eee" strokeDasharray="8" />
-        return (
-        <Line
-          dot={false}
-          name={props.yAxisName}
-          isAnimationActive={false}
-          dataKey="yAxis"
-          stroke={props.theme?.stroke || "#8884d8"}
-        />
-        );
-        <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
+        {props.yList.map((ele: any) => {
+          return (
+            <Line
+              dot={false}
+              key={ele[0]}
+              name={props.yAxisName}
+              isAnimationActive={false}
+              dataKey={ele[0]}
+              stroke={props.theme?.stroke || "#8884d8"}
+            />
+          );
+        })}
+        <XAxis tick={false} dataKey={props.xList[0]} padding={{ right: 50 }}>
           <Label
             style={{
               textAnchor: "middle",

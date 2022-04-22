@@ -35,15 +35,23 @@ function AreaChartRui(props: any) {
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="8" stroke="#DFE2E6" />
-        <Area
-          name={props.yAxisName}
-          dataKey="yAxis"
-          isAnimationActive={false}
-          stroke={props.theme?.stroke || "#82ca9d"}
-          fill={fillString}
-        />
 
-        <XAxis tick={false} dataKey="xAxis" padding={{ right: 50 }}>
+        {props.yList.map((ele: any) => {
+          console.log(ele[0]);
+
+          return (
+            <Area
+              name={props.yAxisName}
+              key={ele[0]}
+              dataKey={ele[0]}
+              isAnimationActive={false}
+              stroke={props.theme?.stroke || "#82ca9d"}
+              fill={fillString}
+            />
+          );
+        })}
+
+        <XAxis tick={false} dataKey={props.xList[0]} padding={{ right: 50 }}>
           <Label
             style={{
               textAnchor: "middle",
@@ -54,7 +62,7 @@ function AreaChartRui(props: any) {
             value={"Time seconds"}
           />
         </XAxis>
-        <YAxis dataKey="yAxis">
+        <YAxis>
           <Label
             dx={-15}
             style={{
